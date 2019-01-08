@@ -1,0 +1,26 @@
+global:
+  # the image tag to use
+  imageTag: v0.1.12
+  # the node to run n
+  nodeSelector: |
+    node.type: sedemo-loggen
+  # https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#concurrency-policy
+  concurrencyPolicy: Replace
+  # https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits
+  successfulJobsHistoryLimit: 5
+  # https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#jobs-history-limits
+  failedJobsHistoryLimit: 5
+  # the max amount of CPU the pod can use
+  cpuLimit: 100m
+  # the max amount of memory the pod can use
+  memoryLimit: 256Mi
+  # the initial amount of CPU the pod can use
+  cpuRequest: 50m
+  # the initial amount of memory the pod can use
+  memoryRequest: 128Mi
+  # the max heapsize for Java
+  Xmx: 256m
+  # the number of replicas
+  replicaCount: 1
+  # Slack API token for App
+  slackAPIToken: foo

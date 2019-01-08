@@ -1,0 +1,39 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  labels:
+    app: {{ template "scattorshot.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: {{ .Release.Service | quote }}
+    release: {{ .Release.Name | quote }}
+  name: {{ template "scattorshot.fullname" . }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "scattorshot.name" . }}
+  replicas: {{ .Values.global.replicaCount }}
+  revisionHistoryLimit: 0
+  template:
+    metadata:
+      labels:
+        app: {{ template "scattorshot.name" . }}
+      annotations:
+        sumologic.com/format: "text"
+    spec:
+      nodeSelector:
+        {{ .Values.global.nodeSelector }}
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: {{ template "scattorshot.name" . }}
+        image:  "224064240808.dkr.ecr.us-east-1.amazonaws.com/scattorshot:{{ .Values.global.imageTag }}"
+        resources:
+          limits:
+            cpu: {{ default .Values.global.cpuLimit .Values.cpuLimit }}
+            memory: {{ default .Values.global.memoryLimit .Values.memoryLimit }}
+          requests:
+            cpu: {{ default .Values.global.cpuRequest .Values.cpuRequest }}
+            memory: {{ default .Values.global.memoryRequest .Values.memoryRequest }}
+        env:
+        - name: SM_SLACK_API_TOKEN
+          value: {{ default .Values.global.slackAPIToken .Values.slackAPIToken }}
