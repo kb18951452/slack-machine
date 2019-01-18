@@ -2,8 +2,8 @@ from machine.plugins.base import MachineBasePlugin
 from machine.plugins.decorators import listen_to
 import re
 
-class UltimateQuestionPlugin(MachineBasePlugin):
-
+class OverageAlerts(MachineBasePlugin):
+    # Bot will @listen_to the channel for the regex expression to be matched.
     @listen_to(regex=r'^overagesalert ')
     def question(self, message):
         # message contains multiple lines from Sumologic. Messages that are too-long from Sumo are split (nicely)
@@ -72,7 +72,6 @@ class UltimateQuestionPlugin(MachineBasePlugin):
                 else:
                     # If you can't find AE, send an error message.
                     message.say("Cannot find slack account for " + ae_email)
-                    # TODO: Change the attachment to proper json element, possibly as a function?
                     message.say_webapi(payload,attachment)
 
 def lookup_by_email(message,lookup_email):
